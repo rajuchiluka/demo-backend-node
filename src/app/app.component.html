@@ -1,31 +1,37 @@
-<div>
-  <div *ngIf="!showAddForm">
-    <button (click)="addNote()" style="cursor: pointer;">Add Note</button>
+<div *ngIf="!showEditForm">
+  <div *ngIf="!showAddForm" style="margin-top: 25px;margin-left: 45px;">
+    <button (click)="addNote()" class="btn btn-default" style="cursor: pointer;">Add Note</button>
   </div>
-  <div *ngIf="showAddForm">
-    <div>
-      <label>Title:</label>
-      <div>
-        <input type="text" name="title" [(ngModel)]="model.title">
-      </div>
-    </div>
-    <div>
-      <label>Content:</label>
-      <div>
-        <input type="text" name="content" [(ngModel)]="model.content">
-      </div>
-    </div>
-    <div>
-      <button (click)="submitAddNote()" style="cursor: pointer;">Submit</button>
+</div>
+<div *ngIf="showEditForm" class="container">
+  <label>Edit Note</label>
+  <div>
+    <label>Title:</label>
+    <div class="form-group">
+      <input type="text" name="title" class="form-control" [(ngModel)]="model.title">
     </div>
   </div>
   <div>
-    <table class="table">
+    <label>Content:</label>
+    <div class="form-group">
+      <input type="text" name="content" class="form-control" [(ngModel)]="model.content">
+    </div>
+  </div>
+  <div>
+    <button (click)="cancelEditNote()" class="btn btn-default" style="cursor: pointer;float: right;">Cancel</button>
+    <button (click)="submitEditNote()" class="btn btn-success" style="cursor: pointer;">Submit</button>
+  </div>
+</div>
+
+<div *ngIf="showNoteList">
+  <div *ngIf="notes.length>0;  else empty_list" class="tableContainer">
+    <table class="table" id="notes">
       <thead class="table table-dark-head">
           <tr>
               <th>Title</th>
               <th>Content</th>
-              <th>Action</th>
+              <th>Edit</th>
+              <th>Delete</th>
           </tr>
       </thead>
       <tbody>
@@ -34,11 +40,36 @@
               <td>{{note.content}}</td>
               <td>
                 <span><i (click)="editNote(note)" class="fa fa-edit" style="color: green;cursor: pointer;"></i></span>
+                
+              </td>
+              <td>
                 <span><i (click)="deleteNote(note)" class="fa fa-trash" style="color: red;cursor: pointer;"></i></span>
               </td>
             </tr>
       </tbody>
     </table>
+  </div>
+  <ng-template #empty_list>Note List Is Empty</ng-template>
+  
+</div>
+
+<div *ngIf="showAddForm" class="container">
+  <label>Add Note</label>
+  <div>
+    <label>Title:</label>
+    <div class="form-group">
+      <input type="text" name="title" class="form-control" [(ngModel)]="model.title">
+    </div>
+  </div>
+  <div>
+    <label>Content:</label>
+    <div class="form-group">
+      <input type="text" name="content" class="form-control" [(ngModel)]="model.content">
+    </div>
+  </div>
+  <div>
+    <button (click)="cancelAddNote()" class="btn btn-default" style="cursor: pointer;float: right;">Cancel</button>
+    <button (click)="submitAddNote()" class="btn btn-success" style="cursor: pointer;">Submit</button>
   </div>
 </div>
 

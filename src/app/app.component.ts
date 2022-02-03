@@ -9,16 +9,18 @@ import { NotesService } from './notes.service';
 export class AppComponent {
   title = 'demo-backend-node';
   showAddForm = false;
+  showNoteList = true;
+  showEditForm = false;
   notes: any = [];
   model:any={};
   constructor(private notesService:NotesService) { }
 
   ngOnInit(){
-    this.getMenusAll();
+    this.getAllNotes();
   }
 
 
-  getMenusAll(){
+  getAllNotes(){
     let errorMessage = "Error Loading !!!, Please contact admin.";
     this.notesService.getNotesAll().subscribe(
       (response: any[]) => {
@@ -34,22 +36,34 @@ export class AppComponent {
   }
 
   editNote(note){
-
+    this.model = note;
+    this.showEditForm = true;
+    this.showNoteList = false;
   }
 
   deleteNote(note){
-    
+    let errorMessage = "Error Loading !!!, Please contact admin.";
+    this.notesService.deleteNote(note._id).subscribe(
+      (response: any[]) => {
+        
+    },
+    error =>{
+      this.notes=[];
+      this.model={};
+    },
+    () =>{
+      this.model={};
+      this.getAllNotes();
+    }) ;
   }
 
   addNote(){
     this.showAddForm = true;
+    this.showNoteList = false;
   }
 
   submitAddNote(){
     this.showAddForm = false;
-    console.log(this.model);
-    // this.model={};
-    // this.model={"title":"3","content":"api 3"};
     let errorMessage = "Error Loading !!!, Please contact admin.";
     this.notesService.addNote(this.model).subscribe(
       (response: any[]) => {
@@ -61,8 +75,37 @@ export class AppComponent {
     },
     () =>{
       this.model={};
-      this.getMenusAll();
+      this.getAllNotes();
+      this.showNoteList = true;
     }) ;
+  }
+
+  cancelAddNote(){
+    this.showAddForm = false;
+    this.showNoteList = true;
+  }
+
+  submitEditNote(){
+    this.showEditForm = false;
+    let errorMessage = "Error Loading !!!, Please contact admin.";
+    this.notesService.editNote(this.model).subscribe(
+      (response: any[]) => {
+        
+    },
+    error =>{
+      this.notes=[];
+      this.model={};
+    },
+    () =>{
+      this.model={};
+      this.getAllNotes();
+      this.showNoteList = true;
+    }) ;
+  }
+
+  cancelEditNote(){
+    this.showNoteList = true;
+    this.showEditForm = false;
   }
 
 }
